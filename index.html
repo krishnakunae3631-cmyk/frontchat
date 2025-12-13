@@ -1,59 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Hugging Face Chatbot</title>
+  <title>Groq Chatbot</title>
   <style>
-    body { font-family: Arial; background:#f2f2f2; }
-    .box {
-      width:420px; margin:50px auto; background:#fff;
-      padding:15px; border-radius:8px;
-      box-shadow:0 0 10px rgba(0,0,0,.1);
-    }
-    #chat {
-      height:320px; border:1px solid #ddd;
-      padding:10px; overflow-y:auto; margin-bottom:10px;
-    }
-    .user { color:blue; margin:5px 0; }
-    .bot { color:green; margin:5px 0; }
-    .row { display:flex; gap:5px; }
-    input { flex:1; padding:8px; }
-    button { padding:8px 15px; }
+    body { font-family: Arial; background:#f4f4f4 }
+    #box { width:400px; margin:50px auto; background:#fff; padding:20px }
+    #chat { height:250px; overflow:auto; border:1px solid #ccc; padding:10px }
+    input { width:75% }
+    button { width:20% }
   </style>
 </head>
 <body>
-
-<div class="box">
-  <h2>HF Chatbot</h2>
-  <div id="chat"></div>
-  <div class="row">
-    <input id="input" placeholder="Type a message..." />
+  <div id="box">
+    <h3>Groq Chatbot</h3>
+    <div id="chat"></div><br>
+    <input id="msg" placeholder="Type message">
     <button onclick="send()">Send</button>
   </div>
-</div>
 
 <script>
-const BACKEND_URL = "https://ai-chat-back-1.onrender.com/chat"; // your backend URL
+const BACKEND = "https://ai-chat-back-1.onrender.com";
 
 async function send() {
-  const input = document.getElementById("input");
-  const chat = document.getElementById("chat");
-  const msg = input.value.trim();
-  if (!msg) return;
+  const msg = document.getElementById("msg").value;
+  document.getElementById("chat").innerHTML += `<b>You:</b> ${msg}<br>`;
+  document.getElementById("msg").value = "";
 
-  chat.innerHTML += `<div class="user"><b>You:</b> ${msg}</div>`;
-  input.value = "";
-
-  const res = await fetch(BACKEND_URL, {
+  const res = await fetch(BACKEND + "/chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ message: msg })
   });
 
   const data = await res.json();
-  chat.innerHTML += `<div class="bot"><b>Bot:</b> ${data.reply}</div>`;
-  chat.scrollTop = chat.scrollHeight;
+  document.getElementById("chat").innerHTML += `<b>Bot:</b> ${data.reply}<br>`;
 }
 </script>
-
 </body>
 </html>
