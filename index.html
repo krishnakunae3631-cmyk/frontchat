@@ -1,104 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>Gemini Chatbot</title>
-
-<style>
-body {
-  font-family: Arial, sans-serif;
-  background: #f2f2f2;
-}
-
-.chat-box {
-  width: 420px;
-  margin: 50px auto;
-  background: #fff;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
-h2 {
-  text-align: center;
-}
-
-#chat {
-  height: 320px;
-  border: 1px solid #ddd;
-  padding: 10px;
-  overflow-y: auto;
-  margin-bottom: 10px;
-}
-
-.user {
-  color: blue;
-  margin: 5px 0;
-}
-
-.bot {
-  color: green;
-  margin: 5px 0;
-}
-
-.input-row {
-  display: flex;
-  gap: 5px;
-}
-
-input {
-  flex: 1;
-  padding: 8px;
-}
-
-button {
-  padding: 8px 15px;
-  cursor: pointer;
-}
-</style>
+  <title>Gemini Chatbot</title>
+  <style>
+    body { font-family: Arial; background:#f2f2f2; }
+    .box {
+      width:420px; margin:50px auto; background:#fff;
+      padding:15px; border-radius:8px;
+      box-shadow:0 0 10px rgba(0,0,0,.1);
+    }
+    #chat {
+      height:320px; border:1px solid #ddd;
+      padding:10px; overflow-y:auto; margin-bottom:10px;
+    }
+    .user { color:blue; margin:5px 0; }
+    .bot { color:green; margin:5px 0; }
+    .row { display:flex; gap:5px; }
+    input { flex:1; padding:8px; }
+    button { padding:8px 15px; }
+  </style>
 </head>
-
 <body>
 
-<div class="chat-box">
+<div class="box">
   <h2>Gemini Chatbot</h2>
-
   <div id="chat"></div>
-
-  <div class="input-row">
+  <div class="row">
     <input id="input" placeholder="Type a message..." />
-    <button onclick="sendMessage()">Send</button>
+    <button onclick="send()">Send</button>
   </div>
 </div>
 
 <script>
-const BACKEND_URL = "https://ai-chat-back-1.onrender.com//chat";
+const BACKEND_URL = "https://ai-chat-back-1.onrender.com/chat";
 
-async function sendMessage() {
+async function send() {
   const input = document.getElementById("input");
   const chat = document.getElementById("chat");
+  const msg = input.value.trim();
+  if (!msg) return;
 
-  const text = input.value.trim();
-  if (!text) return;
-
-  chat.innerHTML += `<div class="user"><b>You:</b> ${text}</div>`;
+  chat.innerHTML += `<div class="user"><b>You:</b> ${msg}</div>`;
   input.value = "";
 
-  try {
-    const res = await fetch(BACKEND_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: text })
-    });
+  const res = await fetch(BACKEND_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message: msg })
+  });
 
-    const data = await res.json();
-
-    chat.innerHTML += `<div class="bot"><b>Gemini:</b> ${data.reply}</div>`;
-    chat.scrollTop = chat.scrollHeight;
-
-  } catch (err) {
-    chat.innerHTML += `<div class="bot">❌ Backend not reachable</div>`;
-  }
+  const data = await res.json();
+  chat.innerHTML += `<div class="bot"><b>Gemini:</b> ${data.reply}</div>`;
+  chat.scrollTop = chat.scrollHeight;
 }
 </script>
 
