@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Gemini Chatbot</title>
+  <title>Hugging Face Chatbot</title>
   <style>
     body { font-family: Arial; background:#f2f2f2; }
     .box {
@@ -23,7 +23,7 @@
 <body>
 
 <div class="box">
-  <h2>Gemini Chatbot</h2>
+  <h2>HF Chatbot</h2>
   <div id="chat"></div>
   <div class="row">
     <input id="input" placeholder="Type a message..." />
@@ -32,7 +32,7 @@
 </div>
 
 <script>
-const BACKEND_URL = "https://ai-chat-back-1.onrender.com/chat";
+const BACKEND_URL = "https://ai-chat-back-1.onrender.com/chat"; // change if needed
 
 async function send() {
   const input = document.getElementById("input");
@@ -50,7 +50,7 @@ async function send() {
   });
 
   const data = await res.json();
-  chat.innerHTML += `<div class="bot"><b>Gemini:</b> ${data.reply}</div>`;
+  chat.innerHTML += `<div class="bot"><b>Bot:</b> ${data.reply}</div>`;
   chat.scrollTop = chat.scrollHeight;
 }
 </script>
