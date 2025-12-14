@@ -4,15 +4,25 @@
   <title>Free AI Chatbot</title>
   <style>
     body { font-family: Arial; background:#f2f2f2; }
-    .box { width:400px; margin:50px auto; background:#fff; padding:15px; }
-    #chat { height:250px; overflow:auto; border:1px solid #ccc; padding:10px; }
+    .box {
+      width:420px; margin:50px auto; background:#fff;
+      padding:15px; border-radius:8px;
+    }
+    #chat {
+      height:300px; overflow:auto;
+      border:1px solid #ccc; padding:10px;
+      margin-bottom:10px;
+    }
+    .user { color:blue; margin:5px 0; }
+    .bot { color:green; margin:5px 0; }
   </style>
 </head>
 <body>
+
 <div class="box">
   <h3>Free AI Chat</h3>
-  <div id="chat"></div><br>
-  <input id="msg" placeholder="Type message">
+  <div id="chat"></div>
+  <input id="msg" placeholder="Type message..." style="width:75%">
   <button onclick="send()">Send</button>
 </div>
 
@@ -20,19 +30,25 @@
 const BACKEND = "https://ai-chat-back-1.onrender.com"; // your backend URL
 
 async function send() {
-  const m = msg.value;
-  chat.innerHTML += "<b>You:</b> " + m + "<br>";
-  msg.value = "";
+  const msgInput = document.getElementById("msg");
+  const chat = document.getElementById("chat");
+  const text = msgInput.value.trim();
+  if (!text) return;
 
-  const r = await fetch(BACKEND + "/chat", {
+  chat.innerHTML += `<div class="user"><b>You:</b> ${text}</div>`;
+  msgInput.value = "";
+
+  const res = await fetch(BACKEND + "/chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message: m })
+    body: JSON.stringify({ message: text })
   });
 
-  const d = await r.json();
-  chat.innerHTML += "<b>Bot:</b> " + d.reply + "<br>";
+  const data = await res.json();
+  chat.innerHTML += `<div class="bot"><b>Bot:</b> ${data.reply}</div>`;
+  chat.scrollTop = chat.scrollHeight;
 }
 </script>
+
 </body>
 </html>
