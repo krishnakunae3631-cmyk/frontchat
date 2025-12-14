@@ -1,39 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Groq Chatbot</title>
+  <title>Free AI Chatbot</title>
   <style>
-    body { font-family: Arial; background:#f4f4f4 }
-    #box { width:400px; margin:50px auto; background:#fff; padding:20px }
-    #chat { height:250px; overflow:auto; border:1px solid #ccc; padding:10px }
-    input { width:75% }
-    button { width:20% }
+    body { font-family: Arial; background:#f2f2f2; }
+    .box { width:400px; margin:50px auto; background:#fff; padding:15px; }
+    #chat { height:250px; overflow:auto; border:1px solid #ccc; padding:10px; }
   </style>
 </head>
 <body>
-  <div id="box">
-    <h3>Groq Chatbot</h3>
-    <div id="chat"></div><br>
-    <input id="msg" placeholder="Type message">
-    <button onclick="send()">Send</button>
-  </div>
+<div class="box">
+  <h3>Free AI Chat</h3>
+  <div id="chat"></div><br>
+  <input id="msg" placeholder="Type message">
+  <button onclick="send()">Send</button>
+</div>
 
 <script>
-const BACKEND = "https://ai-chat-back-1.onrender.com";
+const BACKEND = "https://ai-chat-back-1.onrender.com"; // your backend URL
 
 async function send() {
-  const msg = document.getElementById("msg").value;
-  document.getElementById("chat").innerHTML += `<b>You:</b> ${msg}<br>`;
-  document.getElementById("msg").value = "";
+  const m = msg.value;
+  chat.innerHTML += "<b>You:</b> " + m + "<br>";
+  msg.value = "";
 
-  const res = await fetch(BACKEND + "/chat", {
+  const r = await fetch(BACKEND + "/chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message: msg })
+    body: JSON.stringify({ message: m })
   });
 
-  const data = await res.json();
-  document.getElementById("chat").innerHTML += `<b>Bot:</b> ${data.reply}<br>`;
+  const d = await r.json();
+  chat.innerHTML += "<b>Bot:</b> " + d.reply + "<br>";
 }
 </script>
 </body>
